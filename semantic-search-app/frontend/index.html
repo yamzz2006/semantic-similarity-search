@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nearest — Semantic Similarity Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="7" r="3.4" fill="#FFB86B"/>
+        <circle cx="7" cy="24" r="3.4" fill="#7C6CFF"/>
+        <circle cx="25" cy="24" r="3.4" fill="#7C6CFF"/>
+        <path d="M16 10.4L8.4 21.2M16 10.4L23.6 21.2" stroke="rgba(231,233,245,0.35)" stroke-width="1.4"/>
+      </svg>
+      <span class="wordmark">Nearest</span>
+    </div>
+    <div class="status-pill" id="statusPill">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">Checking model…</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Word2Vec · Cosine Similarity</p>
+        <h1>Search by meaning,<br/>not by keyword.</h1>
+        <p class="sub">
+          Nearest embeds every document into a vector space and finds the ones
+          closest to your query in meaning — even when the words don't match.
+        </p>
+
+        <form id="searchForm" class="search-bar">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input
+            id="queryInput"
+            type="text"
+            placeholder="Try: how do I keep customer data private in the cloud?"
+            autocomplete="off"
+          />
+          <div class="topk-select">
+            <select id="topKSelect" title="Number of results">
+              <option value="5" selected>Top 5</option>
+              <option value="8">Top 8</option>
+              <option value="10">Top 10</option>
+              <option value="15">Top 15</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary" id="searchBtn">Search</button>
+        </form>
+
+        <div class="hero-meta" id="heroMeta"></div>
+      </div>
+
+      <div class="hero-visual">
+        <canvas id="spaceCanvas"></canvas>
+        <div class="visual-caption">the embedding space</div>
+      </div>
+    </section>
+
+    <section class="results-section" id="resultsSection">
+      <div class="results-head" id="resultsHead" hidden>
+        <h2 id="resultsTitle">Nearest matches</h2>
+        <span class="results-timing" id="resultsTiming"></span>
+      </div>
+      <div class="results-grid" id="resultsGrid"></div>
+      <div class="empty-state" id="emptyState">
+        <p>Run a search above to see the nearest documents light up.</p>
+      </div>
+    </section>
+
+    <section class="upload-section">
+      <div class="upload-card">
+        <div class="upload-info">
+          <h3>Bring your own dataset</h3>
+          <p>
+            Upload a CSV with <code>Title</code>, <code>Content</code>, and
+            <code>Keywords</code> columns. Nearest cleans the text, trains a
+            fresh Word2Vec model on it, and swaps in your data — right here,
+            no notebook required.
+          </p>
+          <div class="req-chips">
+            <span class="chip">Title</span>
+            <span class="chip">Content</span>
+            <span class="chip">Keywords</span>
+          </div>
+        </div>
+
+        <label class="dropzone" id="dropzone" for="fileInput">
+          <input type="file" id="fileInput" accept=".csv" hidden />
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 16V4M12 4L7 9M12 4L17 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 16V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span class="dz-title" id="dzTitle">Drop a CSV here, or click to browse</span>
+          <span class="dz-sub" id="dzSub">.csv — Title, Content, Keywords columns</span>
+        </label>
+      </div>
+      <div class="upload-status" id="uploadStatus"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Nearest runs entirely on your machine — FastAPI backend, gensim Word2Vec, no external API calls.</p>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
